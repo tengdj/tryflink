@@ -1,13 +1,6 @@
 package main;
 
-import iot.data.aot.AOTData;
-import iot.data.taxi.ChicagoMap;
 import iot.data.taxi.TaxiData;
-import iot.tools.gps.*;
-import iot.tools.utils.Util;
-
-import java.text.ParseException;
-import java.util.ArrayList;
 
 public class Main {
 	
@@ -18,10 +11,12 @@ public class Main {
 		
 //		gh = GeoHash.withCharacterPrecision(40.084591, 116.031330, 12);
 //		System.out.println(gh.toBase32());
-//		
-		AOTData dt = new AOTData("data/aot");
-		dt.loadFromFiles("data/aot/data.csv");
-		dt.loadFromFiles("data/aot/data.csv.gz");
+//
+		
+		
+//		AOTData dt = new AOTData("data/aot");
+//		dt.loadFromFiles("data/aot/data.csv");
+//		dt.loadFromFiles("data/aot/data.csv.gz");
 		
 		
 //		ClimateData cd = new ClimateData("climate");
@@ -33,8 +28,8 @@ public class Main {
 //		System.out.println(Map.genGeoJson(nav));
 		
 		
-//		TaxiData td = new TaxiData();
-//		td.loadFromFile("data/chicago/Taxi_Trips.csv");
+		TaxiData td = new TaxiData("data/chicago/formated");
+		td.loadFromFiles("data/chicago/Taxi_Trips.csv");
 
 		
 

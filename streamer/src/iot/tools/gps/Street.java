@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import iot.common.Point;
+import iot.tools.utils.Util;
 
 /*
  * represents a segment with some features
@@ -13,6 +14,7 @@ import iot.common.Point;
 public class Street {
 	public Point start;
 	public Point end;
+	public double length = -1.0;//Euclid distance of vector start->end
 	public long id;
 	public ArrayList<Street> connected = new ArrayList<Street>();
 	public ArrayList<Long> connected_id = new ArrayList<Long>();//internal use only, facilitate list for loading connection relations
@@ -33,10 +35,20 @@ public class Street {
 
 	}
 	
+	
+	//not distance in real world, but Euclid distance of the vector from start to end 
+	public double getLength() {
+		if(length<0) {
+			this.length = Util.dist_sqr(start.longitude,start.latitude,end.longitude,end.latitude);
+		}
+		return this.length;
+	}
+	
 	public Street(Point start, Point end, long id) {
 		this.start = start;
 		this.end = end;
 		this.id = id;
+		this.length = Util.dist_sqr(start.longitude,start.latitude,end.longitude,end.latitude);
 	}
 	
 	public Street() {

@@ -19,4 +19,10 @@ public class Point {
 		}
 		return Math.sqrt((longitude-p.longitude)*(longitude-p.longitude)+(latitude-p.latitude)*(latitude-p.latitude));
 	}
+	
+	public boolean equals(Point obj) {
+		return obj!=null&&longitude==obj.longitude&&latitude==obj.latitude;
+	}
+	
+	
 }

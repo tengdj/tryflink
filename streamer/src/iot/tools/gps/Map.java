@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import iot.common.Point;
 import iot.tools.utils.Util;
 
@@ -37,23 +40,71 @@ public class Map {
 		}		
 	}
 	
-	public static String genGeoJson(ArrayList<Street> streets) {
+	private static JSONObject wrapGeoJSON(ArrayList<JSONObject> origins) {
+		JSONObject col = new JSONObject();
+		col.put("type","FeatureCollection");
+		JSONArray feas = new JSONArray();
+		int i = 0;
+		for(JSONObject o:origins) {
+			JSONObject obj = new JSONObject();
+			obj.put("type", "Feature");
+			obj.put("geometry", o);
+			JSONObject ps = new JSONObject();
+			ps.put("id", ++i);
+			obj.put("properties",ps);
+			feas.put(obj);
+		}
+		col.put("features", feas);
+		return col;
+	}
+	
+	public static JSONObject genGeoJson(ArrayList<Street> streets) {
+		
+		
+		JSONObject obj = new JSONObject();
+		
+		obj.put("type", "MultiLineString");
+		
+		JSONArray arr = new JSONArray();
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"type\":\"MultiLineString\",\"coordinates\":\n\t[\n");
-		int count = 0;
 		for(Street s:streets) {
-			sb.append("\t");
-			if(count++!=0) {
-				sb.append(",");
-			}
-			sb.append("[["+s.start.longitude+","+s.start.latitude+"],["+s.end.longitude+","+s.end.latitude+"]]\n");
+			JSONArray sta = new JSONArray();
+			JSONArray jas = new JSONArray();
+			JSONArray jae = new JSONArray();
+			jas.put(s.start.longitude);
+			jas.put(s.start.latitude);
+			jae.put(s.end.longitude);
+			jae.put(s.end.latitude);
+			sta.put(jas);
+			sta.put(jae);
+			arr.put(sta);
 		}
-		sb.append("\t]\n}\n");
-		return sb.toString();
+		obj.put("coordinates", arr);
+		
+		ArrayList<JSONObject> ret = new ArrayList<JSONObject>();
+		ret.add(obj);
+		return wrapGeoJSON(ret);
+	}
+	
+	public static JSONObject genGeoJsonPoints(ArrayList<Point> points) {
+		
+		ArrayList<JSONObject> ret = new ArrayList<JSONObject>();
+		for(Point p:points) {
+			JSONObject o = new JSONObject();
+			o.put("type", "Point");
+			JSONArray co = new JSONArray();
+			co.put(p.longitude);
+			co.put(p.latitude);
+			o.put("coordinates", co);
+			ret.add(o);
+		}
+		return wrapGeoJSON(ret);
 	}
 	
 	public String toString() {
-		return Map.genGeoJson(streets);
+		return Map.genGeoJson(streets).toString();
 	}
 	public void print() {
 		
@@ -197,9 +248,13 @@ public class Map {
 			}
 		}
 		
-		
-		
-		return ret;
+		ArrayList<Street> reversed = new ArrayList<Street>();
+		reversed.ensureCapacity(ret.size());
+		for(int i=ret.size()-1;i>=0;i--) {
+			reversed.add(ret.get(i));
+		}
+		ret.clear();
+		return reversed;
 		
 	}
 
