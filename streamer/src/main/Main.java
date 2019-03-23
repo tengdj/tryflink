@@ -1,6 +1,8 @@
 package main;
 
+import iot.data.taxi.ChicagoMap;
 import iot.data.taxi.TaxiData;
+import iot.tools.gps.Map;
 
 public class Main {
 	
@@ -22,7 +24,9 @@ public class Main {
 //		ClimateData cd = new ClimateData("climate");
 //		cd.loadFolder("climate/daily");
 		
-//		Map st = new ChicagoMap();
+		ChicagoMap st = new ChicagoMap();
+		st.loadFromJson("data/chicago/rows.json");
+		st.dumpTo("data/chicago/formated");
 //		st.loadFromFormatedData("data/chicago/formated");
 //		ArrayList<Street> nav = st.navigate(new Point(-87.62076287,41.89833179), new Point(-87.90303966,41.97907082));
 //		System.out.println(Map.genGeoJson(nav));
