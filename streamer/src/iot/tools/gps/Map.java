@@ -28,6 +28,10 @@ public class Map {
 		
 	}
 	
+	public ArrayList<Street> getStreets(){
+		return streets;
+	}
+	
 	/*
 	 * compare each street pair to see if they connect with each other
 	 * */

@@ -40,6 +40,15 @@ public class FileBatchReader {
 		return str;
 	}
 	
+	public ArrayList<String> readLines() {
+		ArrayList<String> ret_lines = new ArrayList<String>();
+		while(!eof) {
+			ret_lines.addAll(lines);
+			nextBatch();
+		}
+		return ret_lines;
+	}
+	
 	public void nextBatch() {
 		lines.clear();
 		String line;

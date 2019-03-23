@@ -1,5 +1,7 @@
 package iot.data.taxi;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,6 +12,34 @@ import iot.tools.utils.FileBatchReader;
 
 public class ChicagoMap extends Map {
 
+	
+	public void loadFromCsv(String path) {
+		
+		System.out.println("loading streets from csv file "+path);
+		FileBatchReader fr = new FileBatchReader(path);
+		ArrayList<String> lines = fr.readLines();
+		lines.remove(0);
+		int id = 0;
+		for(String l:lines) {
+			//System.out.println(l);
+			String splits[] = l.split("\"");
+			if(splits.length<=2) {
+				continue;
+			}
+			String geo = splits[1];
+			geo = geo.substring(18,geo.length()-2);
+			geo = geo.replace(", ", ",");
+			String sts[] = geo.split(",");
+			
+			Point head = new Point(Double.parseDouble(sts[0].split(" ")[0]),Double.parseDouble(sts[0].split(" ")[1]));
+			Point tail = new Point(Double.parseDouble(sts[sts.length-1].split(" ")[0]),Double.parseDouble(sts[sts.length-1].split(" ")[1]));
+			streets.add(new Street(head,tail,id++));
+		}
+		
+		System.out.println(streets.size()+" streets are loaded");
+		connect_segments();
+	}
+	
 	public void loadFromJson(String path) {
 		
 		System.out.println("loading streets from Json file "+path);
@@ -46,7 +76,8 @@ public class ChicagoMap extends Map {
 //				streets.add(seg);
 //			}
 		}
-		connect_segments();
 		System.out.println(streets.size()+" streets are loaded");
+		System.out.println("now connecting the segments");
+		connect_segments();
 	}
 }
