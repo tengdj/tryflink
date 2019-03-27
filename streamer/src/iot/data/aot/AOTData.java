@@ -4,10 +4,11 @@ import java.text.ParseException;
 import java.util.HashMap;
 
 import iot.common.Point;
+import iot.common.TemporalSpatialData;
 import iot.tools.utils.CompressedFileReader;
 import iot.tools.utils.FileBatchReader;
 
-public class AOTData implements iot.common.TemporalSpatialData{
+public class AOTData extends TemporalSpatialData{
 	
 	HashMap<Long, Node> nodes = new HashMap<>();
 	HashMap<String, Provenance> provenances = new HashMap<>();
@@ -17,13 +18,6 @@ public class AOTData implements iot.common.TemporalSpatialData{
 	public AOTData(String path) {
 		this.initialize(path);
 	}
-	
-//	//emit loaded data to targeted ports as real time data
-//	@Override
-//	public void emit(Event e) {
-//		
-//		//System.out.println(d.geohash);
-//	};
 	
 	//emit formated data
 	@Override
@@ -40,10 +34,8 @@ public class AOTData implements iot.common.TemporalSpatialData{
 		}else {
 			System.err.println("unsupported file format");
 		}
-		int count = 0;
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				count++;
 				if(header) {
 					header = false;
 					continue;
@@ -72,7 +64,6 @@ public class AOTData implements iot.common.TemporalSpatialData{
 				}
 			}
 			reader.nextBatch();
-			System.out.println(count);
 		}
 		reader.closeFile();
 	}

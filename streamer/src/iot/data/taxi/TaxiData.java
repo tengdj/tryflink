@@ -5,19 +5,21 @@ import java.util.ArrayList;
 import iot.common.Event;
 import iot.tools.gps.Street;
 
-public class TaxiData implements iot.common.TemporalSpatialData {
-
-	ChicagoMap map = new ChicagoMap();
+public class TaxiData extends iot.common.TemporalSpatialData{
 	
+	public long limits = Long.MAX_VALUE;
+	ChicagoMap map = new ChicagoMap();
+
 	@Override
 	public void initialize(String path) {
 		if(path.endsWith("json")) {
 			map.loadFromJson(path);
+		}else if(path.endsWith("csv")){
+			map.loadFromCsv(path);
 		}else {
 			map.loadFromFormatedData(path);
 		}
 	}
-	double max = Double.MIN_VALUE;
 
 	
 	/*
@@ -43,9 +45,10 @@ public class TaxiData implements iot.common.TemporalSpatialData {
 	
 	@Override
 	public void emit(Event e) {
-
-		//System.out.println(e.toString());
-	
+		if(out!=null) {
+			out.println(e.toJson().toString());	
+		}
+		limits--;
 	}
 	
 	
@@ -54,17 +57,25 @@ public class TaxiData implements iot.common.TemporalSpatialData {
 		initialize(map_file);
 	}
 	
+	public TaxiData(String map_file, long limits) {
+		initialize(map_file);
+		if(limits>0) {
+			this.limits = limits;
+		}
+	}
+	
 	@Override
 	public void loadFromFiles(String path) {
 		
 		iot.tools.utils.FileBatchReader fb = new iot.tools.utils.FileBatchReader(path);
-		int count = 0;
 		boolean header = true;
 		while(!fb.eof) {
-			
+			if(limits<=0) {
+				break;
+			}
 			for(String s:fb.lines) {
-				if(count++>100) {
-					return;
+				if(limits<=0) {
+					break;
 				}
 				if(header) {
 					header = false;
@@ -88,6 +99,7 @@ public class TaxiData implements iot.common.TemporalSpatialData {
 			break;
 			
 		}
+		fb.closeFile();
 	}
 
 

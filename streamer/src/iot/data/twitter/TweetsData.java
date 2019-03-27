@@ -7,12 +7,12 @@ import iot.common.Event;
 import iot.tools.utils.CompressedFileReader;
 import iot.tools.utils.FileBatchReader;
 
-public class TweetsData implements iot.common.TemporalSpatialData{
+public class TweetsData extends iot.common.TemporalSpatialData{
 
 	//emit the tweet record to stream
 	@Override
 	public void emit(Event t) {
-		
+		out.println(t.toString());
 	}
 	
 	@Override

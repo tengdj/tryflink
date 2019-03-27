@@ -3,21 +3,17 @@ package iot.data.climate;
 import java.io.File;
 import java.util.HashMap;
 
-import iot.common.Event;
+import iot.common.TemporalSpatialData;
 import iot.tools.utils.FileBatchReader;
 
-public class ClimateData implements iot.common.TemporalSpatialData{
+public class ClimateData extends TemporalSpatialData{
 	
-	HashMap<String,State> states = new HashMap<>();
+	HashMap<String,iot.data.climate.State> states = new HashMap<>();
 	HashMap<String,Station> stations = new HashMap<>();
 
 	//Initialization, load the states and stations information
 	public ClimateData(String path) {
 		initialize(path);
-	}
-	
-	@Override
-	public void emit(Event e) {
 	}
 	
 	@Override
@@ -84,7 +80,7 @@ public class ClimateData implements iot.common.TemporalSpatialData{
 					header = false;
 					continue;
 				}
-				State s = new State(line.split(" "));
+				iot.data.climate.State s = new iot.data.climate.State(line.split(" "));
 				states.put(s.abbriev,s);
 			}
 			reader.nextBatch();

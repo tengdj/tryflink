@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 
+import io.streamers.AOTStreamer;
+import io.streamers.ChicagoTaxiStreamer;
 import iot.common.Point;
 import iot.data.aot.AOTData;
 import iot.data.taxi.ChicagoMap;
@@ -30,12 +32,13 @@ public class Main {
 //		ClimateData cd = new ClimateData("climate");
 //		cd.loadFolder("climate/daily");
 		
-		ChicagoMap st = new ChicagoMap();
+//		ChicagoMap st = new ChicagoMap();
 //		st.loadFromCsv("data/chicago/transportation.csv");
 //		st.dumpTo("data/chicago/formated");
-		st.loadFromFormatedData("data/chicago/formated");
-		ArrayList<Street> nav = st.navigate(new Point(-87.62076287,41.89833179), new Point(-87.90303966,41.97907082));
-    	Util.dumpToFile("chicago", Map.genGeoJson(nav).toString(1));
+//		st.loadFromFormatedData("data/chicago/formated");
+//		ArrayList<Street> nav = st.navigate(new Point(-87.62076287,41.89833179), new Point(-87.90303966,41.97907082));
+//		
+//    	Util.dumpToFile("chicago", Map.genGeoJson(nav).toString(1));
 		
 //		TaxiData td = new TaxiData("data/chicago/formated");
 //		td.loadFromFiles("data/chicago/Taxi_Trips.csv");
@@ -43,6 +46,24 @@ public class Main {
 		
 
 //		System.out.println(Util.min_distance_point_to_segment(0,0, 2,0, 0, 4));
+		
+		
+		
+//		TaxiData td = new TaxiData("data/chicago/formated");
+//		td.setPort(9000);
+//		td.setPath("data/chicago/Taxi_Trips.csv");
+//		//td.limits = 100;
+//		td.start();
+//		
+//		ChicagoTaxiStreamer st = new ChicagoTaxiStreamer();
+//		st.start();
+		
+		AOTData at = new AOTData("data/aotdata/");
+		at.setPath("data/aotdata/data.csv");
+		at.start();
+		
+		AOTStreamer as = new AOTStreamer();
+		as.start();
 	}
 	
 }
