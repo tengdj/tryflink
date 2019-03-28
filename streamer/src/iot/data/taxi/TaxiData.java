@@ -7,6 +7,7 @@ import iot.tools.gps.Street;
 
 public class TaxiData extends iot.common.TemporalSpatialData{
 	
+	/* limit for test only, stop after emitting such events */
 	public long limits = Long.MAX_VALUE;
 	ChicagoMap map = new ChicagoMap();
 
@@ -39,8 +40,6 @@ public class TaxiData extends iot.common.TemporalSpatialData{
 			// for each 
 			emit(c);
 		}
-
-
 	}
 	
 	@Override

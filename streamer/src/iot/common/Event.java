@@ -8,6 +8,7 @@ public class Event {
 	public Point coordinate;
 	public JSONObject features;
 	public String geohash = null;
+	public String id = "";
 	
 	
 	public Event() {

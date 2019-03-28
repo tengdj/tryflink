@@ -5,11 +5,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import io.streamers.BaseStreamer;
-
 public abstract class TemporalSpatialData extends Thread{
 	
-	public int port = BaseStreamer.default_port;
+	public int port = 9000;
 	public String load_path;
 	public PrintWriter out = null;
 	public Socket socket = null;

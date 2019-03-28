@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import iot.common.Point;
+
 @SuppressWarnings("javadoc")
 public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	private static final int MAX_BIT_PRECISION = 64;
@@ -33,7 +35,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	}
 
 	protected long bits = 0;
-	private WGS84Point point;
+	private Point point;
 
 	private BoundingBox boundingBox;
 
@@ -114,7 +116,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		double latitude = (latitudeRange[0] + latitudeRange[1]) / 2;
 		double longitude = (longitudeRange[0] + longitudeRange[1]) / 2;
 
-		hash.point = new WGS84Point(latitude, longitude);
+		hash.point = new Point(longitude,latitude);
 		setBoundingBox(hash, latitudeRange, longitudeRange);
 		hash.bits <<= (MAX_BIT_PRECISION - hash.significantBits);
 		return hash;
@@ -143,7 +145,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		double latitude = (latitudeRange[0] + latitudeRange[1]) / 2;
 		double longitude = (longitudeRange[0] + longitudeRange[1]) / 2;
 
-		hash.point = new WGS84Point(latitude, longitude);
+		hash.point = new Point(longitude,latitude);
 		setBoundingBox(hash, latitudeRange, longitudeRange);
 		hash.bits <<= (MAX_BIT_PRECISION - hash.significantBits);
 		return hash;
@@ -160,7 +162,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	}
 
 	private GeoHash(double latitude, double longitude, int desiredPrecision) {
-		point = new WGS84Point(latitude, longitude);
+		point = new Point(longitude,latitude);
 		desiredPrecision = Math.min(desiredPrecision, MAX_BIT_PRECISION);
 
 		boolean isEvenBit = true;
@@ -181,9 +183,8 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	}
 
 	private static void setBoundingBox(GeoHash hash, double[] latitudeRange, double[] longitudeRange) {
-		hash.boundingBox = new BoundingBox(new WGS84Point(latitudeRange[0], longitudeRange[0]), new WGS84Point(
-				latitudeRange[1],
-				longitudeRange[1]));
+		hash.boundingBox = new BoundingBox(new Point(longitudeRange[0],latitudeRange[0]), new Point(
+				longitudeRange[1],latitudeRange[1]));
 	}
 
 	public GeoHash next(int step) {
@@ -326,16 +327,16 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	 * <i>Note: this operation checks the bounding boxes coordinates, i.e. does
 	 * not use the {@link GeoHash}s special abilities.s</i>
 	 */
-	public boolean contains(WGS84Point point) {
+	public boolean contains(Point point) {
 		return boundingBox.contains(point);
 	}
 
 	/**
-	 * returns the {@link WGS84Point} that was originally used to set up this.<br>
+	 * returns the {@link Point} that was originally used to set up this.<br>
 	 * If it was built from a base32-{@link String}, this is the center point of
 	 * the bounding box.
 	 */
-	public WGS84Point getPoint() {
+	public Point getPoint() {
 		return point;
 	}
 
@@ -344,7 +345,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 	 * the same point that was used to build the hash.
 	 */
 	// TODO: make sure this method works as intented for corner cases!
-	public WGS84Point getBoundingBoxCenterPoint() {
+	public Point getBoundingBoxCenterPoint() {
 		return boundingBox.getCenterPoint();
 	}
 
@@ -352,7 +353,7 @@ public final class GeoHash implements Comparable<GeoHash>, Serializable {
 		return boundingBox;
 	}
 
-	public boolean enclosesCircleAroundPoint(WGS84Point point, double radius) {
+	public boolean enclosesCircleAroundPoint(Point point, double radius) {
 		return false;
 	}
 

@@ -59,10 +59,10 @@ public class Street {
 		if(seg==null) {
 			return null;
 		}
-		if(seg.start.close(start)||seg.start.close(end)) {
+		if(seg.start.equals(start)||seg.start.equals(end)) {
 			return seg.start;
 		}
-		if(seg.end.close(end)||seg.end.close(start)) {
+		if(seg.end.equals(end)||seg.end.equals(start)) {
 			return seg.end;
 		}
 		return null;

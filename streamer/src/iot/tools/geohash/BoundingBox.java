@@ -10,6 +10,8 @@ package iot.tools.geohash;
 
 import java.io.Serializable;
 
+import iot.common.Point;
+
 public class BoundingBox implements Serializable {
 	private static final long serialVersionUID = -7145192134410261076L;
 	private double minLat;
@@ -20,7 +22,7 @@ public class BoundingBox implements Serializable {
 	/**
 	 * create a bounding box defined by two coordinates
 	 */
-	public BoundingBox(WGS84Point p1, WGS84Point p2) {
+	public BoundingBox(Point p1, Point p2) {
 		this(p1.getLatitude(), p2.getLatitude(), p1.getLongitude(), p2.getLongitude());
 	}
 
@@ -35,12 +37,12 @@ public class BoundingBox implements Serializable {
 		this(that.minLat, that.maxLat, that.minLon, that.maxLon);
 	}
 
-	public WGS84Point getUpperLeft() {
-		return new WGS84Point(maxLat, minLon);
+	public Point getUpperLeft() {
+		return new Point(minLon,maxLat);
 	}
 
-	public WGS84Point getLowerRight() {
-		return new WGS84Point(minLat, maxLon);
+	public Point getLowerRight() {
+		return new Point(maxLon,minLat);
 	}
 
 	public double getLatitudeSize() {
@@ -79,7 +81,7 @@ public class BoundingBox implements Serializable {
 		return (int) (f ^ (f >>> 32));
 	}
 
-	public boolean contains(WGS84Point point) {
+	public boolean contains(Point point) {
 		return (point.getLatitude() >= minLat) && (point.getLongitude() >= minLon) && (point.getLatitude() <= maxLat)
 				&& (point.getLongitude() <= maxLon);
 	}
@@ -93,10 +95,10 @@ public class BoundingBox implements Serializable {
 		return getUpperLeft() + " -> " + getLowerRight();
 	}
 
-	public WGS84Point getCenterPoint() {
+	public Point getCenterPoint() {
 		double centerLatitude = (minLat + maxLat) / 2;
 		double centerLongitude = (minLon + maxLon) / 2;
-		return new WGS84Point(centerLatitude, centerLongitude);
+		return new Point(centerLongitude,centerLatitude);
 	}
 
 	public void expandToInclude(BoundingBox other) {

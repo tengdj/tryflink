@@ -28,6 +28,13 @@ public class Map {
 		
 	}
 	
+	public void clear() {
+		for(Street s:streets) {
+			s.connected.clear();
+		}
+		streets.clear();
+	}
+	
 	public ArrayList<Street> getStreets(){
 		return streets;
 	}
@@ -142,6 +149,8 @@ public class Map {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	public void loadFromFormatedData(String path) {
 		
