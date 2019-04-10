@@ -1,5 +1,18 @@
 # IotDB
 
+## Things to Do
+* Implement two use cases
+  1. Stream weather data (AOTData) - DONE
+     * Implement AOTStreamer
+     * Map input data to Event - DONE
+     * Patition data using location - KeyBy(geohash) - DONE
+     * Keep a global state corresponding to each geohash
+     * Configurable window length
+     * Update global state for each window
+     * Generate alert if delta is greater than predefined threshold
+  2. Stream driver data
+     * TODO ...
+
 ## Dependencies (UNIX)
 * Java 8
 * Maven 3

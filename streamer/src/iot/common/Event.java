@@ -1,6 +1,8 @@
 package iot.common;
 
 import org.json.JSONObject;
+/* Local imports */
+import iot.tools.geohash.GeoHash;
 
 public class Event {
 
@@ -35,7 +37,8 @@ public class Event {
 
     public String getGeoHash() {
 	if(geohash==null) {
-	    geohash = iot.tools.geohash.GeoHash.withCharacterPrecision(coordinate.latitude, coordinate.longitude, 12).toBase32();
+	    geohash = GeoHash.withCharacterPrecision(coordinate.latitude,
+						     coordinate.longitude, 12).toBase32();
 	}
 	return geohash;
     }
