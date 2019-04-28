@@ -101,6 +101,4 @@ public class TaxiData extends iot.common.TemporalSpatialData{
 		fb.closeFile();
 	}
 
-
-
 }

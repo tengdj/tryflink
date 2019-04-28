@@ -5,6 +5,7 @@ import java.text.ParseException;
 import org.json.JSONObject;
 
 import iot.common.Event;
+import iot.common.Point;
 import iot.tools.utils.Util;
 
 
@@ -34,7 +35,7 @@ public class Element extends Event{
 		System.out.println("time:\t"+timestamp);
 	}
 	
-	public Element(String stid,int year, int month, String element, int date, String data) {
+	public Element(String stid,int year, int month, String element, int date, Station st, String data) {
 		
 		value = Double.parseDouble(data.substring(0,5));
 		if(value==-9999) {
@@ -54,19 +55,20 @@ public class Element extends Event{
 				e.printStackTrace();
 				valid = false;
 			}
-
-
+			this.coordinate =  new Point(st.longitude, st.latitude);
+			this.geohash = st.geohash;
 		}
-		
-		
 
-		
 	}
 
 	@Override
 	public JSONObject getFeatures() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject feature = new JSONObject();
+		feature.put("element", element);
+		feature.put("station", stationid);
+		feature.put("geohash", geohash);
+		feature.put("value", value);
+		return feature;
 	}
 
 }

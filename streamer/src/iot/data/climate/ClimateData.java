@@ -46,7 +46,7 @@ public class ClimateData extends TemporalSpatialData{
 						String element = line.substring(17,21);
 						//traverse all 31 days in one month, each one takes 8 characters
 						for(int i=0;i<31;i++) {
-							Element e = new Element(stid,year,month,element,i+1,line.substring(21+i*8,29+i*8));
+							Element e = new Element(stid,year,month,element,i+1, stations.get(stid), line.substring(21+i*8,29+i*8));
 							if(e.valid) {
 								emit(e);
 								count++;
