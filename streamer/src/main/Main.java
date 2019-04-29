@@ -12,5 +12,4 @@ public class Main {
 		//Test.test_geohash();
 
 	}
-	
 }

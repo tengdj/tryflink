@@ -19,14 +19,14 @@ public class StreamerConfig {
     	return Integer.parseInt(config.getProperty(prop));
     }
     
-    // initialize the singleton
-    static{
-		InputStream inputStream = null;
+    public static void reloadProperties() {
+    	InputStream inputStream = null;
 		try {
 		    config = new Properties();
 		    inputStream =
 		    	StreamerConfig.class.getClassLoader().getResourceAsStream("streamer.properties");
 		    if(inputStream == null) {
+		    	System.out.println("streamer.properties not found in jar file, try local file system");
 		    	inputStream = new FileInputStream(new File("streamer.properties"));
 		    }
 		    config.load(inputStream);
@@ -46,6 +46,11 @@ public class StreamerConfig {
 		    	System.out.println("No stream to close");
 		    }
 		}
+    }
+    
+    // initialize the singleton
+    static{
+		StreamerConfig.reloadProperties();
     }
 
 }

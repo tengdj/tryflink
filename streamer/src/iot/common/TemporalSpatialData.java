@@ -9,14 +9,17 @@ import iot.tools.utils.StreamerConfig;
 
 public abstract class TemporalSpatialData extends Thread{
 	
-	public int port = StreamerConfig.getInt("stream-port");
-	public String load_path = null;
-	public PrintWriter out = null;
-	public Socket socket = null;
-	public ServerSocket listener = null;
+	int port = StreamerConfig.getInt("stream-port");
+	String load_path = null;
+	protected PrintWriter out = null;
+	Socket socket = null;
+	ServerSocket listener = null;
 	
 	public abstract void initialize(String path);
 	public abstract void loadFromFiles(String path);
+	public void finalize() {
+		System.out.println("loading complate");
+	}
 	public void emit(Event e) {
 		if(out!=null) {
 			out.println(e.toString());

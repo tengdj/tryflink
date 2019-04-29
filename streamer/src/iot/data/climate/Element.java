@@ -27,15 +27,16 @@ public class Element extends Event{
 	@Override
 	public void print() {
 		System.out.println("station:\t"+stationid);
+		System.out.println("coordinate:\t"+coordinate.latitude+","+coordinate.longitude);
 		System.out.println("element:\t"+element);
 		System.out.println("mflag:\t"+mflag);
 		System.out.println("qflag:\t"+qflag);
 		System.out.println("sflag:\t"+sflag);
 		System.out.println("value:\t"+value);
-		System.out.println("time:\t"+timestamp);
+		System.out.println("time:\t"+Util.formatTimestamp(timestamp));
 	}
 	
-	public Element(String stid,int year, int month, String element, int date, Station st, String data) {
+	public Element(String stid,int year, int month, int date, String element, Station st, String data) {
 		
 		value = Double.parseDouble(data.substring(0,5));
 		if(value==-9999) {
@@ -51,12 +52,15 @@ public class Element extends Event{
 			try {
 				timestamp = Util.getTimestamp(time);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				valid = false;
 			}
 			this.coordinate =  new Point(st.longitude, st.latitude);
 			this.geohash = st.geohash;
+			if(qflag!=' ') {
+				// the value is fail the check
+				valid = false;
+			}
 		}
 
 	}

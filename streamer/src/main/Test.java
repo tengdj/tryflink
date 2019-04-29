@@ -64,7 +64,12 @@ public class Test {
 	
 	public static void test_load_climatedata() {
 		ClimateData cd = new ClimateData("data/climate");
-		cd.loadFromFiles("data/climate/daily");		
+		ArrayList<String> elements = new ArrayList<String>();
+		elements.add("TMAX");
+		elements.add("TMIN");
+		cd.setInterestedElements(elements);
+		cd.loadFromFiles(StreamerConfig.get("climate-data-dir"));
+		cd.finalize();
 	}
 	
 	public static void test_load_chicagomap() {

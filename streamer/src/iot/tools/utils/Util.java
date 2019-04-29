@@ -4,7 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.Locale;
+import java.sql.Timestamp;
 
 public class Util {
 	
@@ -13,11 +15,21 @@ public class Util {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format,Locale.US);
 		java.util.Date parsedDate;
 		parsedDate = dateFormat.parse(time);
-		java.sql.Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+		java.sql.Timestamp timestamp = new Timestamp(parsedDate.getTime());
 		return timestamp.getTime();	
 		
 	}
 	
+	public static String formatTimestamp(String format, long timestamp) {
+		Timestamp ts=new Timestamp(timestamp);  
+        Date date=new Date(ts.getTime());  
+        SimpleDateFormat formater = new SimpleDateFormat(format);
+        return formater.format(date);
+	}
+	
+	public static String formatTimestamp(long timestamp){
+		return Util.formatTimestamp("yyyy/MM/dd hh:mm:ss",timestamp);
+	}
 	
 	public static long getTimestamp(String time) throws ParseException {
 		return Util.getTimestamp("yyyy/MM/dd hh:mm:ss",time);
@@ -30,7 +42,6 @@ public class Util {
 			fw.append(content);
 			fw.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -83,6 +94,15 @@ public class Util {
 			return Math.sqrt((nx-x)*(nx-x)+(ny-y)*(ny-y));
 		}	
 		
+	}
+	
+	// conversion between Celcius and Fahrenheit
+	public static double celToFah(double cel) {
+		return  (9.0/5) * cel + 32;
+	}
+	
+	public static double fahToCel(double fah) {
+		return (5.0/9) * (fah - 32);
 	}
 	
 }
