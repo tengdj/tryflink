@@ -13,6 +13,12 @@
   2. Stream driver data
      * TODO ...
 
+## Datasets
+* Chicago AOT dataset can be downloaded from url https://aot-file-browser.plenar.io/data-sets/chicago-complete
+. download and decompress certain datasets into a folder and specify the folder path as aot-data-dir in streamer.properties file
+* Climate dataset can be downloaded from url ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/download . firstly download the ghcn-stations.txt and ghcn-states.txt in a folder and specify the path of the folder as climate-meta-dir in streamer.properties. Then donwload the ghcn_all.tar.gz file and decompress it. The decompressed folder contains hundreds of thousands of txt files with station ids. specify the folder contain those txt files as climate-data-dir in streamer.properties.
+* Chicago taxi trip dataset can be downloaded from url https://data.cityofchicago.org/Transportation/Taxi-Trips/wrvz-psew/data . click the export button to download the dataset as XML format. Then download the chicago street map dataset from url https://data.cityofchicago.org/Transportation/Street-Center-Lines/6imu-meau
+ download as xml file. 
 ## Dependencies (UNIX)
 * Java 8
 * Maven 3
