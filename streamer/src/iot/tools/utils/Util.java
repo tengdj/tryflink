@@ -55,7 +55,9 @@ public class Util {
 	}
 	
 	
-	public static double min_distance_point_to_segment(double x, double y, double x1, double y1, double x2, double y2) {
+	public static double min_distance_point_to_segment(double x, double y, 
+													   double x1, double y1, 
+													   double x2, double y2) {
 		
 		//the segment is vertical
 		if(x1==x2) {
