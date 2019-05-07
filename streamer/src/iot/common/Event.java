@@ -7,7 +7,7 @@ public class Event {
 
 	public long timestamp;
 	public Point coordinate;
-	public JSONObject features;
+	public JSONObject features = null;
 	public String geohash = null;
 	public String id = "";
 	
@@ -17,12 +17,17 @@ public class Event {
 	}
 	public Event(String str) {
 		JSONObject obj = new JSONObject(str);
+		id = obj.getString("id");
 		timestamp = obj.getLong("timestamp");
 		coordinate = new Point(obj.getDouble("longitude"),obj.getDouble("latitude"));
 		features = obj.getJSONObject("features");
 		getGeoHash();
 	}
 	public JSONObject getFeatures() {
+		if(features!=null) {
+			return features;
+		}
+		features = new JSONObject();
 		return features;
 	}
 	
@@ -43,6 +48,7 @@ public class Event {
 	
 	public JSONObject toJson() {
 		JSONObject jsonobj = new JSONObject();
+		jsonobj.put("id", id);
 		jsonobj.put("timestamp", timestamp);
 		jsonobj.put("longitude", coordinate.longitude);
 		jsonobj.put("latitude", coordinate.latitude);

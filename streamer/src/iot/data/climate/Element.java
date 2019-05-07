@@ -67,10 +67,9 @@ public class Element extends Event{
 
 	@Override
 	public JSONObject getFeatures() {
-		JSONObject feature = new JSONObject();
+		JSONObject feature = super.getFeatures();
 		feature.put("element", element);
-		feature.put("station", stationid);
-		feature.put("geohash", geohash);
+		feature.put("stationid", stationid);
 		feature.put("value", value);
 		return feature;
 	}
