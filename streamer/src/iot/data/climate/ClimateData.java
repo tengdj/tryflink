@@ -62,6 +62,14 @@ public class ClimateData extends TemporalSpatialData{
 	
 	@Override
 	public void emit(Event e) {
+		Element elm = (Element)e;
+		if(elm.element.contentEquals("TMIN")||elm.element.contentEquals("TMAX")) {
+			elm.value /= 10;
+		}else {
+			return;
+		}
+		
+		// update the statistics
 		global_count++;
 		if(!parsed_data.containsKey(e.timestamp)) {
 			Long val = 0L;
@@ -69,7 +77,8 @@ public class ClimateData extends TemporalSpatialData{
 		}
 		Long old_val = parsed_data.get(e.timestamp);
 		parsed_data.put(e.timestamp, old_val+1);
-		Element elm = (Element)e;
+		
+		// update the min and max value
 		if(min_elm==null||max_elm==null) {
 			min_elm = elm;
 			max_elm = elm;
@@ -82,10 +91,16 @@ public class ClimateData extends TemporalSpatialData{
 			max_elm = elm;
 		}
 		
+		// print to socket
+		if(out!=null) {
+			out.println(e.toJson().toString());
+		}
+		
 	}
 	
 	@Override
 	public void finalize() {
+		// print the statistics of the parsed dataset
 		System.out.println(global_count+" records emitted from "+parsed_data.size()+" days");
 		long min = Long.MAX_VALUE;
 		long max = Long.MIN_VALUE;

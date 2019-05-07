@@ -49,6 +49,7 @@ public abstract class TemporalSpatialData extends Thread{
 		}
 		loadFromFiles(load_path);
 		disconnect();
+		finalize();
 	}
 	
 	public void disconnect() {

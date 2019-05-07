@@ -9,6 +9,7 @@ import iot.data.taxi.ChicagoMap;
 import iot.data.taxi.TaxiData;
 import iot.streamers.AOTStreamer;
 import iot.streamers.ChicagoTaxiStreamer;
+import iot.streamers.ClimateStreamer;
 import iot.tools.geohash.GeoHash;
 import iot.tools.gps.Map;
 import iot.tools.gps.Street;
@@ -48,7 +49,6 @@ public class Test {
 
 	public static void test_streaming_taxidata() {
 		TaxiData td = new TaxiData("data/chicago/formated");
-		td.setPort(9000);
 		td.setPath("data/chicago/Taxi_Trips.csv");
 		td.limits = 1000;
 		td.start();
@@ -63,13 +63,30 @@ public class Test {
 	}
 	
 	public static void test_load_climatedata() {
-		ClimateData cd = new ClimateData("data/climate");
+		ClimateData cd = new ClimateData(StreamerConfig.get("climate-meta-dir"));
 		ArrayList<String> elements = new ArrayList<String>();
 		elements.add("TMAX");
 		elements.add("TMIN");
 		cd.setInterestedElements(elements);
-		cd.loadFromFiles(StreamerConfig.get("climate-data-dir"));
-		cd.finalize();
+		cd.setPath(StreamerConfig.get("climate-data-dir-tiny"));
+		cd.start();
+		try {
+			cd.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void test_streaming_climatedata() {
+		ClimateStreamer cs = new ClimateStreamer();
+		cs.start();
+		try {
+			cs.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static void test_load_chicagomap() {

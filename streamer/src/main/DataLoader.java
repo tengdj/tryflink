@@ -7,7 +7,8 @@ public class DataLoader{
 	 * */
     public static void main(String args[]){
 
-    	Test.test_create_stream_aotdata();
+    	Test.test_load_climatedata();
+    	//Test.test_create_stream_aotdata();
 	
     }
 }
