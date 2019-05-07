@@ -3,9 +3,10 @@ package iot.data.taxi;
 import java.util.ArrayList;
 
 import iot.common.Event;
+import iot.common.TemporalSpatialData;
 import iot.tools.gps.Street;
 
-public class TaxiData extends iot.common.TemporalSpatialData{
+public class TaxiData extends TemporalSpatialData{
 	
 	/* limit for test only, stop after emitting such events */
 	public long limits = Long.MAX_VALUE;
