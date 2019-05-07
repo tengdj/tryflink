@@ -1,6 +1,6 @@
 package main;
 
-public class FlinkDataStreamer {
+public class DataStreamer {
 	/*
 	 * an entry point to start a Flink stream server
 	 * to receive data from a client

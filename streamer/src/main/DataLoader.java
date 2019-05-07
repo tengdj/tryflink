@@ -1,6 +1,6 @@
 package main;
 
-public class AOTDataLoader{
+public class DataLoader{
 
 	/*
 	 * an entry point to start a client to load and send data
