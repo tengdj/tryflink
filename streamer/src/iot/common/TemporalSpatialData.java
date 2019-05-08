@@ -20,7 +20,7 @@ public abstract class TemporalSpatialData extends Thread{
 	public void finalize() {
 		System.out.println("loading complate");
 	}
-	public void emit(Event e) {
+	protected void emit(Event e) {
 		if(out!=null) {
 			out.println(e.toString());
 		}else {

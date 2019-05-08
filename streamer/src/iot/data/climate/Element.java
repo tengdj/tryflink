@@ -36,7 +36,8 @@ public class Element extends Event{
 		System.out.println("time:\t"+Util.formatTimestamp(timestamp));
 	}
 	
-	public Element(String stid,int year, int month, int date, String element, Station st, String data) {
+	// parse from the raw file
+	public Element(int year, int month, int date, String element, Station st, String data) {
 		
 		value = Double.parseDouble(data.substring(0,5));
 		if(value==-9999) {
@@ -44,7 +45,7 @@ public class Element extends Event{
 		}else {
 			valid = true;
 			this.element = element;
-			stationid = stid;
+			stationid = st.ID;
 			mflag = data.charAt(5);
 			qflag = data.charAt(6);
 			sflag = data.charAt(7);
@@ -63,6 +64,20 @@ public class Element extends Event{
 			}
 		}
 
+	}
+	
+	// the formated file
+	public Element(long timestamp, String element, Station st, double value, char flags[]) {
+		this.value = value;
+		this.timestamp = timestamp;
+		this.element = element;
+		this.stationid = st.ID;
+		this.coordinate = new Point(st.longitude, st.latitude);
+		this.geohash = st.geohash;
+		this.mflag = flags[0];
+		this.qflag = flags[1];
+		this.sflag = flags[2];
+		this.valid = true;
 	}
 
 	@Override

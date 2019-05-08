@@ -1,11 +1,14 @@
 package iot.tools.utils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.sql.Timestamp;
 
 public class Util {
@@ -105,6 +108,39 @@ public class Util {
 	
 	public static double fahToCel(double fah) {
 		return (5.0/9) * (fah - 32);
+	}
+	
+	// list all the files recursively inside a path
+	public static ArrayList<String> listFiles(String path){
+		File folder = new File(path);
+		ArrayList<String> files = new ArrayList<String>();
+		if(folder.isDirectory()) {
+			for(File f:folder.listFiles()) {
+				files.addAll(listFiles(f.getAbsolutePath()));
+			}
+		}else {
+			files.add(folder.getAbsolutePath());
+		}
+		return files;
+	}
+	
+	public static void clearFolder(File file) {
+		if(file.isDirectory()) {
+			for(File f:file.listFiles()) {
+				clearFolder(f);
+			}
+			file.delete();
+		}else {
+			file.delete();			
+		}
+	}
+	
+	public static void sleep(long seconds) {
+		try {
+			TimeUnit.SECONDS.sleep(seconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

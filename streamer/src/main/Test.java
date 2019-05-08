@@ -1,6 +1,11 @@
 package main;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
 
 import iot.common.Point;
 import iot.data.aot.AOTData;
@@ -13,7 +18,9 @@ import iot.streamers.ClimateStreamer;
 import iot.tools.geohash.GeoHash;
 import iot.tools.gps.Map;
 import iot.tools.gps.Street;
+import iot.tools.utils.ClimateDataTransposer;
 import iot.tools.utils.StreamerConfig;
+import iot.tools.utils.Util;
 
 public class Test {
 
@@ -110,5 +117,50 @@ public class Test {
 		TaxiData td = new TaxiData("data/chicago/formated");
 		td.loadFromFiles("data/chicago/Taxi_Trips.csv");
 	}
+	
+	
+	public static void transposeClimateData(String output_dir, String origin_dir, String meta_dir, int thread_num) {
+		System.out.println("clearing "+output_dir);
+		Util.clearFolder(new File(output_dir));
+		File folder = new File(output_dir);
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		ArrayList<String> list = Util.listFiles(origin_dir);
+		Stack<String> stack = new Stack<>();
+		for(String s:list) {
+			stack.push(s);
+		}
+		ArrayList<String> elements = new ArrayList<String>();
+		elements.add("TMAX");
+		elements.add("TMIN");
+		ArrayList<ClimateDataTransposer> transposers = new ArrayList<>();
+		HashMap<Long, FileWriter> writers = new HashMap<>();
+		for(int i=0;i<thread_num;i++) {
+			ClimateDataTransposer transposer = new ClimateDataTransposer(i, meta_dir, output_dir, stack, writers);
+			transposer.setInterestedElements(elements);
+			transposer.start();
+			transposers.add(transposer);
+		}
+		
+		for(int i=0;i<thread_num;i++) {
+			try {
+				transposers.get(i).join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("closing the writers, may take minutes");
+		for (HashMap.Entry<Long, FileWriter> entry : writers.entrySet()) {
+			try {
+				entry.getValue().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		writers.clear();
+	}
+	
 	
 }

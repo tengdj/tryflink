@@ -1,6 +1,7 @@
 package iot.data.climate;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,17 +42,16 @@ time:	1913/07/10 12:00:00
  * */
 public class ClimateData extends TemporalSpatialData{
 	
-	HashMap<String,iot.data.climate.State> states = new HashMap<>();
-	HashMap<String,Station> stations = new HashMap<>();
-	HashMap<String,Boolean> interested_elements = new HashMap<>();
+	protected HashMap<String,iot.data.climate.State> states = new HashMap<>();
+	protected HashMap<String,Station> stations = new HashMap<>();
+	protected HashMap<String,Boolean> interested_elements = new HashMap<>();
 	HashMap<Long,Long> parsed_data = new HashMap<>();
 	long global_count = 0;
-	long file_counter = 0;
 	Element min_elm = null;
 	Element max_elm = null;
 	//Initialization, load the states and stations information
-	public ClimateData(String path) {
-		initialize(path);
+	public ClimateData(String meta_dir_path) {
+		initialize(meta_dir_path);
 	}
 	
 	public void setInterestedElements(ArrayList<String> elements) {
@@ -61,7 +61,7 @@ public class ClimateData extends TemporalSpatialData{
 	}
 	
 	@Override
-	public void emit(Event e) {
+	protected void emit(Event e) {
 		Element elm = (Element)e;
 		if(elm.element.contentEquals("TMIN")||elm.element.contentEquals("TMAX")) {
 			elm.value /= 10;
@@ -122,7 +122,6 @@ public class ClimateData extends TemporalSpatialData{
 	    	System.out.println("record with maximum temprature: ");
 	    	max_elm.print();
 	    }
-
 	}
 	
 	@Override
@@ -133,45 +132,75 @@ public class ClimateData extends TemporalSpatialData{
 			return;
 		}
 		if(file.isFile()){
-			file_counter++;
 			String file_name = file.getName();
-			String stid = file_name.substring(0,11);
-			//process only the files for US stations which has meta information
-			if(stid.startsWith("US")&&stations.containsKey(stid)) {
-				//loading data
-				boolean header = false;//no header
-				FileBatchReader.batchLimit = 200000;
-				FileBatchReader reader = new FileBatchReader(path);
-				int count = 0;
-				while(!reader.eof) {
-					for(String line:reader.lines) {
-						if(header) {
-							header = false;
-							continue;
-						}
-						int year = Integer.parseInt(line.substring(11,15));
-						int month = Integer.parseInt(line.substring(15,17));
-						String element = line.substring(17,21);
-						// this element is not interested
-						if(!interested_elements.isEmpty()&&!interested_elements.containsKey(element)) {
-							continue;
-						}
-						//traverse all 31 days in one month, each one takes 8 characters
-						for(int i=0;i<31;i++) {
-							Element e = new Element(stid,year,month,i+1, element, stations.get(stid), line.substring(21+i*8,29+i*8));
-							if(e.valid) {
-								emit(e);
-								count++;
+			if(file_name.endsWith(".dly")) {
+				String stid = file_name.substring(0,11);
+				//process only the files for US stations which has meta information
+				if(stid.startsWith("US")&&stations.containsKey(stid)) {
+					//loading data
+					boolean header = false;//no header
+					FileBatchReader.batchLimit = 200000;
+					FileBatchReader reader = new FileBatchReader(path);
+					while(!reader.eof) {
+						for(String line:reader.lines) {
+							if(header) {
+								header = false;
+								continue;
+							}
+							int year = Integer.parseInt(line.substring(11,15));
+							int month = Integer.parseInt(line.substring(15,17));
+							String element = line.substring(17,21);
+							// this element is not interested
+							if(!interested_elements.isEmpty()&&!interested_elements.containsKey(element)) {
+								continue;
+							}
+							//traverse all 31 days in one month, each one takes 8 characters
+							for(int i=0;i<31;i++) {
+								Element e = new Element(year, month, i+1, element, stations.get(stid), line.substring(21+i*8,29+i*8));
+								if(e.valid) {
+									emit(e);
+								}
 							}
 						}
+						reader.nextBatch();
 					}
-					reader.nextBatch();
+					reader.closeFile();
 				}
-				reader.closeFile();
-				if(count>0) {
-					System.out.println("processed "+count+" in file "+file_name+" ("+file_counter+")");
+			}else if(file_name.endsWith(".evt")) {
+				// formated file, all events for one day are stored together
+				String time_str = file_name.replace(".evt", "");
+				char fake_flags[] =  {' ',' ', ' '};
+				try {
+					long timestamp = Util.getTimestamp("yyyy-MM-dd-hh-mm-ss",time_str);
+					boolean header = false;//no header
+					FileBatchReader.batchLimit = 200000;
+					FileBatchReader reader = new FileBatchReader(path);
+					while(!reader.eof) {
+						for(String line:reader.lines) {
+							if(header) {
+								header = false;
+								continue;
+							}
+							String data[] = line.split("|");
+							String stid = data[0];
+							String element = data[1];
+							String value_str = data[2];
+							if(!stations.containsKey(stid)) {
+								continue;
+							}
+							Element e = new Element(timestamp, element, stations.get(stid), Double.parseDouble(value_str), fake_flags);
+							emit(e);
+						}
+						reader.nextBatch();
+					}
+					reader.closeFile();
+				} catch (ParseException e) {
+					e.printStackTrace();
+					System.err.println(time_str+" is not a valid timestamp, should be in format "
+							+ "yyyy-MM-dd-hh-mm-ss");
 				}
 			}
+			
 		}else {//is a folder
 			for(File f:file.listFiles()) {
 				loadFromFiles(f.getAbsolutePath());
@@ -181,7 +210,6 @@ public class ClimateData extends TemporalSpatialData{
 
 	@Override
 	public void initialize(String path) {
-		// TODO Auto-generated method stub
 		FileBatchReader reader;
 		boolean header;
 		//loading states
