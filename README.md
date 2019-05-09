@@ -2,22 +2,20 @@
 
 ## Things to Do
 * Implement two use cases
-  1. Stream weather data (AOTData) - DONE
-     * Implement AOTStreamer
+  1. Stream weather data (ClimateData) - DONE
      * Map input data to Event - DONE
      * Patition data using location - KeyBy(geohash) - DONE
-     * Keep a global state corresponding to each geohash
+     * Keep a global state corresponding to each geohash - DONE
      * Configurable window length
      * Update global state for each window
-     * Generate alert if delta is greater than predefined threshold
+     * Generate alert if delta is greater than predefined threshold - DONE
   2. Stream driver data
      * TODO ...
 
 ## Datasets
-* Chicago AOT dataset can be downloaded from url https://aot-file-browser.plenar.io/data-sets/chicago-complete
-. download and decompress certain datasets into a folder and specify the folder path as aot-data-dir in streamer.properties file
-* Climate dataset can be downloaded from url ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily . firstly download the ghcn-stations.txt and ghcn-states.txt in a folder and specify the path of the folder as climate-meta-dir in streamer.properties. Then donwload the ghcn_all.tar.gz file and decompress it. The decompressed folder contains hundreds of thousands of txt files with station ids. specify the folder contain those txt files as climate-data-dir in streamer.properties.
-* Chicago taxi trip dataset can be downloaded from url https://data.cityofchicago.org/Transportation/Taxi-Trips/wrvz-psew/data . click the export button to download the dataset as XML format. Then download the chicago street map dataset from url https://data.cityofchicago.org/Transportation/Street-Center-Lines/6imu-meau
+* Chicago AOT dataset can be downloaded from url https://aot-file-browser.plenar.io/data-sets/chicago-complete. download and decompress certain datasets into a folder and specify the folder path as aot-data-dir in streamer.properties.
+* Climate dataset can be downloaded from url ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily. Firstly download the ghcn-stations.txt and ghcn-states.txt in a folder and rename them to stations.txt and state.txt respectively, and then specify the path of such folder as climate-meta-dir in streamer.properties. Secondly donwload the ghcn_all.tar.gz file and decompress it. The decompressed folder contains hundreds of thousands of txt files with station ids. Specify the path of the folder containing those txt files as climate-data-dir in streamer.properties.
+* TODO: Chicago taxi trip dataset can be downloaded from url https://data.cityofchicago.org/Transportation/Taxi-Trips/wrvz-psew/data. Click the export button to download the dataset as XML format. Then download the chicago street map dataset from url https://data.cityofchicago.org/Transportation/Street-Center-Lines/6imu-meau
  download as xml file. 
 ## Dependencies (UNIX)
 * Java 8
