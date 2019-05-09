@@ -25,7 +25,7 @@ public class TweetsData extends iot.common.TemporalSpatialData{
 				System.out.println("processing "+path);
 				BufferedReader br = CompressedFileReader.getBufferedReaderForCompressedFile(path,"bzip2");
 				if(br!=null) {
-					FileBatchReader fr = new FileBatchReader(br);
+					FileBatchReader fr = new FileBatchReader(br, false);
 					while(!fr.eof) {
 						for(String s:fr.lines) {
 							emit(new Tweet(s));

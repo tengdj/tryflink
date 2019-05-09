@@ -16,7 +16,7 @@ public class ChicagoMap extends Map {
 	public void loadFromCsv(String path) {
 		
 		System.out.println("loading streets from csv file "+path);
-		FileBatchReader fr = new FileBatchReader(path);
+		FileBatchReader fr = new FileBatchReader(path, false);
 		ArrayList<String> lines = fr.readLines();
 		lines.remove(0);
 		int id = 0;
@@ -43,7 +43,7 @@ public class ChicagoMap extends Map {
 	public void loadFromJson(String path) {
 		
 		System.out.println("loading streets from Json file "+path);
-		FileBatchReader fr = new FileBatchReader(path);
+		FileBatchReader fr = new FileBatchReader(path, false);
 		String json_str = fr.readAll();
 		fr.closeFile();
 		JSONObject object = new JSONObject(json_str);

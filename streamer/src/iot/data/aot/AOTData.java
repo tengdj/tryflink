@@ -23,27 +23,21 @@ public class AOTData extends TemporalSpatialData{
 	public void loadFromFiles(String path) {
 		
 		//loading data
-		boolean header = true;//skip header
 		FileBatchReader.batchLimit = 200000;
 		FileBatchReader reader = null;
 		if(path.endsWith(".csv")) {
-			reader = new FileBatchReader(path);
+			reader = new FileBatchReader(path,true);
 		}else if(path.endsWith(".gz")) {
-			reader = new FileBatchReader(CompressedFileReader.getBufferedReaderForCompressedFile(path, "gz"));
+			reader = new FileBatchReader(CompressedFileReader.getBufferedReaderForCompressedFile(path, "gz"), false);
 		}else {
 			System.err.println("unsupported file format");
 		}
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
 				Thing d;
 				try {
 					d = new Thing(line.split(","));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					continue;
 				}
@@ -73,19 +67,13 @@ public class AOTData extends TemporalSpatialData{
 		FileBatchReader reader;
 		//loading data from provenance file
 		filepath = path+"/provenance.csv";
-		boolean header = true;
-		reader = new FileBatchReader(filepath);
+		reader = new FileBatchReader(filepath,true);
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
 				Provenance p;
 				try {
 					p = new Provenance(line.split(","));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					continue;
 				}
@@ -97,14 +85,9 @@ public class AOTData extends TemporalSpatialData{
 		
 		//loading sensor
 		filepath = path+"/sensors.csv";
-		header = true;//skip header
-		reader = new FileBatchReader(filepath);
+		reader = new FileBatchReader(filepath, true);
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
 				Sensor s = new Sensor(line.split(","));
 				sensors.put(s.sensor+s.parameter,s);
 			}
@@ -114,14 +97,9 @@ public class AOTData extends TemporalSpatialData{
 		
 		//loading nodes
 		filepath = path+"/nodes.csv";
-		header = true;//skip header
-		reader = new FileBatchReader(filepath);
+		reader = new FileBatchReader(filepath, true);
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
 				//contains a string with ","
 				String newline = "";
 				if(line.contains("\"")) {
@@ -148,7 +126,6 @@ public class AOTData extends TemporalSpatialData{
 				try {
 					n = new Node(newline.split(","));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					continue;
 				}

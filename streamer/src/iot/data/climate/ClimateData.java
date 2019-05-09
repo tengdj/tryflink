@@ -54,6 +54,10 @@ public class ClimateData extends TemporalSpatialData{
 		initialize(meta_dir_path);
 	}
 	
+	public ClimateData() {
+		
+	}
+	
 	public void setInterestedElements(ArrayList<String> elements) {
 		for(String e:elements) {
 			interested_elements.put(e, Boolean.TRUE);
@@ -136,51 +140,48 @@ public class ClimateData extends TemporalSpatialData{
 			if(file_name.endsWith(".dly")) {
 				String stid = file_name.substring(0,11);
 				//process only the files for US stations which has meta information
-				if(stid.startsWith("US")&&stations.containsKey(stid)) {
-					//loading data
-					boolean header = false;//no header
-					FileBatchReader.batchLimit = 200000;
-					FileBatchReader reader = new FileBatchReader(path);
-					while(!reader.eof) {
-						for(String line:reader.lines) {
-							if(header) {
-								header = false;
-								continue;
-							}
-							int year = Integer.parseInt(line.substring(11,15));
-							int month = Integer.parseInt(line.substring(15,17));
-							String element = line.substring(17,21);
-							// this element is not interested
-							if(!interested_elements.isEmpty()&&!interested_elements.containsKey(element)) {
-								continue;
-							}
-							//traverse all 31 days in one month, each one takes 8 characters
-							for(int i=0;i<31;i++) {
-								Element e = new Element(year, month, i+1, element, stations.get(stid), line.substring(21+i*8,29+i*8));
-								if(e.valid) {
-									emit(e);
-								}
+				if(!stid.startsWith("US")) {
+					System.out.println("station "+stid+" is not a station located in the US");
+					return;
+				}
+				if(!stations.containsKey(stid)) {
+					System.out.println("station "+stid+" has no meta data and will be passed");
+					return;
+				}
+				
+				//loading data
+				FileBatchReader.batchLimit = 200000;
+				FileBatchReader reader = new FileBatchReader(path, false);
+				while(!reader.eof) {
+					for(String line:reader.lines) {
+						int year = Integer.parseInt(line.substring(11,15));
+						int month = Integer.parseInt(line.substring(15,17));
+						String element = line.substring(17,21);
+						// this element is not interested
+						if(!interested_elements.isEmpty()&&!interested_elements.containsKey(element)) {
+							continue;
+						}
+						//traverse all 31 days in one month, each one takes 8 characters
+						for(int i=0;i<31;i++) {
+							Element e = new Element(year, month, i+1, element, stations.get(stid), line.substring(21+i*8,29+i*8));
+							if(e.valid) {
+								emit(e);
 							}
 						}
-						reader.nextBatch();
 					}
-					reader.closeFile();
+					reader.nextBatch();
 				}
+				reader.closeFile();				
 			}else if(file_name.endsWith(".evt")) {
 				// formated file, all events for one day are stored together
 				String time_str = file_name.replace(".evt", "");
 				char fake_flags[] =  {' ',' ', ' '};
 				try {
 					long timestamp = Util.getTimestamp("yyyy-MM-dd-hh-mm-ss",time_str);
-					boolean header = false;//no header
 					FileBatchReader.batchLimit = 200000;
-					FileBatchReader reader = new FileBatchReader(path);
+					FileBatchReader reader = new FileBatchReader(path, false);
 					while(!reader.eof) {
 						for(String line:reader.lines) {
-							if(header) {
-								header = false;
-								continue;
-							}
 							String data[] = line.split("|");
 							String stid = data[0];
 							String element = data[1];
@@ -211,16 +212,10 @@ public class ClimateData extends TemporalSpatialData{
 	@Override
 	public void initialize(String path) {
 		FileBatchReader reader;
-		boolean header;
 		//loading states
-		header = false;
-		reader = new FileBatchReader(path+"/states.txt");
+		reader = new FileBatchReader(path+"/states.txt", false);
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
 				iot.data.climate.State s = new iot.data.climate.State(line.split(" "));
 				states.put(s.abbriev,s);
 			}
@@ -230,15 +225,10 @@ public class ClimateData extends TemporalSpatialData{
 		
 		
 		//loading stations
-		header = false;
-		reader = new FileBatchReader(path+"/stations.txt");
+		reader = new FileBatchReader(path+"/stations.txt", false);
 		while(!reader.eof) {
 			for(String line:reader.lines) {
-				if(header) {
-					header = false;
-					continue;
-				}
-				if(line.startsWith("US")) {//we only need state
+				if(line.startsWith("US")) {//we only need the data of the US states
 					String st = line.substring(38,40);
 					if(!st.contentEquals("  ")&&states.containsKey(st))// a valid US state
 					{

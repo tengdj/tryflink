@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import iot.common.Event;
 import iot.common.TemporalSpatialData;
 import iot.tools.gps.Street;
+import iot.tools.utils.FileBatchReader;
 
 public class TaxiData extends TemporalSpatialData{
 	
@@ -67,7 +68,7 @@ public class TaxiData extends TemporalSpatialData{
 	@Override
 	public void loadFromFiles(String path) {
 		
-		iot.tools.utils.FileBatchReader fb = new iot.tools.utils.FileBatchReader(path);
+		iot.tools.utils.FileBatchReader fb = new FileBatchReader(path, false);
 		boolean header = true;
 		while(!fb.eof) {
 			if(limits<=0) {

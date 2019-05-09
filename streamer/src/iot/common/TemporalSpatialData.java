@@ -43,7 +43,6 @@ public abstract class TemporalSpatialData extends Thread{
 			System.out.println("connected to "+socket.getInetAddress().getHostAddress());
 			out =  new PrintWriter(socket.getOutputStream(), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
@@ -57,7 +56,6 @@ public abstract class TemporalSpatialData extends Thread{
 			try {
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -65,7 +63,6 @@ public abstract class TemporalSpatialData extends Thread{
 			try {
 				listener.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

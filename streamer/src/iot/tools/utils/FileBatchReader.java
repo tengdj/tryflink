@@ -1,7 +1,6 @@
 package iot.tools.utils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,18 +12,21 @@ public class FileBatchReader {
 	public static int batchLimit =100000;
 	BufferedReader br;
 	
-	public FileBatchReader(String path) {
+	public FileBatchReader(String path, boolean skip_head) {
 		try {
 			br = new BufferedReader(new FileReader(path));
+			//skip the head of the file
+			if(skip_head) {
+				br.readLine();
+			}
 			nextBatch();
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			eof = true;
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 	}
 	
-	public FileBatchReader(BufferedReader br) {
+	public FileBatchReader(BufferedReader br, boolean skip_head) {
 		this.br = br;
 		nextBatch();
 	}
