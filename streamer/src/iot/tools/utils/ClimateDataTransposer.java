@@ -86,15 +86,15 @@ public class ClimateDataTransposer extends ClimateData {
 		}
 		
 		// compose the output string 
-		System.out.println("thread "+thread_id+" is flushing to "+output_dir);
+		System.out.println("thread "+thread_id+":\tflushing to "+output_dir);
 		for (HashMap.Entry<Long,ArrayList<TinyElement>> entry : time_bin.entrySet()) {
 
 			long timestamp = entry.getKey();
 			ArrayList<TinyElement> elements = entry.getValue();
 			String out_str = "";
-			// generate the output string for this file
+			// generate the output string for this file in a csv format
 			for(TinyElement e:elements) {
-				out_str += e.stationid+"|"+e.element+"|"+e.value+"\n";
+				out_str += e.stationid+","+e.element+","+((int)e.value)+"\n";
 			}
 			elements.clear();
 			
@@ -105,20 +105,22 @@ public class ClimateDataTransposer extends ClimateData {
 				if(writers.containsKey(timestamp)) {
 					writer = writers.get(timestamp);
 				}else {
-					String filename = Paths.get(output_dir, Util.formatTimestamp("yyyy-MM-dd-hh-mm-ss", timestamp)+".evt").toString();
+					String filename = Paths.get(output_dir, 
+							Util.formatTimestamp("yyyy-MM-dd-hh-mm-ss", timestamp)+".evt").toString();
 					File outfile = new File(filename);
 					if(!outfile.exists()) {
 						try {
 							outfile.createNewFile();
 						} catch (IOException e) {
 							e.printStackTrace();
+							System.exit(0);
 						}
 					}
 					try {
 						writer = new FileWriter(outfile);
 						writers.put(timestamp, writer);
-					} catch (IOException e1) {
-						e1.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -147,7 +149,6 @@ public class ClimateDataTransposer extends ClimateData {
 			list = time_bin.get(e.timestamp);
 		}
 		Element elm = (Element)e;
-		elm.value /= 10;
 		TinyElement telm = new TinyElement(elm);
 		list.add(telm);
 		time_bin.put(e.timestamp, list);
@@ -171,7 +172,8 @@ public class ClimateDataTransposer extends ClimateData {
 			synchronized(file_list) {
 				if(!file_list.empty()) {
 					path = file_list.pop();
-					System.out.println("thread "+thread_id+" is processing "+path+" ("+file_list.size()+" remains, "+(total_files-file_list.size())+" processed)");
+					System.out.println("thread "+thread_id+":\tprocessing "+path+
+							" ("+file_list.size()+" remains, "+(total_files-file_list.size())+" processed)");
 				}
 			}
 			if(path==null) {
@@ -190,14 +192,14 @@ public class ClimateDataTransposer extends ClimateData {
 	/*
 	 * the wrapper function for the transpose class
 	 * */
-	public static void transposeClimateData(String output_dir, String origin_dir, String meta_dir, int thread_num, long buffer_size) {
-		
+	public static void transposeClimateData(String output_dir, String origin_dir, 
+			String meta_dir, int thread_num, long buffer_size) {
+		long start = System.currentTimeMillis();
 		System.out.println("clearing "+output_dir);
 		Util.clearFolder(new File(output_dir));
 		File folder = new File(output_dir);
-		if(!folder.exists()) {
-			folder.mkdirs();
-		}
+		while(folder.exists());
+		folder.mkdirs();
 		ArrayList<String> list = Util.listFiles(origin_dir);
 		Stack<String> stack = new Stack<>();
 		for(String s:list) {
@@ -212,7 +214,8 @@ public class ClimateDataTransposer extends ClimateData {
 		stats.f0 = 0;
 		stats.f1 = 0;
 		//initialize threads
-		ClimateDataTransposer transposer = new ClimateDataTransposer(0, meta_dir, output_dir, stack, writers, buffer_size, stats);
+		ClimateDataTransposer transposer = new ClimateDataTransposer(0, meta_dir, output_dir, 
+				stack, writers, buffer_size, stats);
 		transposer.setInterestedElements(elements);
 		transposers.add(transposer);
 		for(int i=1;i<thread_num;i++) {
@@ -255,5 +258,7 @@ public class ClimateDataTransposer extends ClimateData {
 			}
 		}
 		writers.clear();
+		long end = System.currentTimeMillis();
+		System.out.println("takes "+((end-start)/1000.0)+" seconds");
 	}
 }

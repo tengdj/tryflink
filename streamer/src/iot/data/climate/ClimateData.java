@@ -97,7 +97,9 @@ public class ClimateData extends TemporalSpatialData{
 		
 		// print to socket
 		if(out!=null) {
-			out.println(e.toJson().toString());
+			out.println(e.toString());
+		}else {
+			System.out.println(e.toString());
 		}
 		
 	}
@@ -150,7 +152,6 @@ public class ClimateData extends TemporalSpatialData{
 				}
 				
 				//loading data
-				FileBatchReader.batchLimit = 200000;
 				FileBatchReader reader = new FileBatchReader(path, false);
 				while(!reader.eof) {
 					for(String line:reader.lines) {
@@ -178,18 +179,21 @@ public class ClimateData extends TemporalSpatialData{
 				char fake_flags[] =  {' ',' ', ' '};
 				try {
 					long timestamp = Util.getTimestamp("yyyy-MM-dd-hh-mm-ss",time_str);
-					FileBatchReader.batchLimit = 200000;
 					FileBatchReader reader = new FileBatchReader(path, false);
 					while(!reader.eof) {
 						for(String line:reader.lines) {
-							String data[] = line.split("|");
+							String data[] = line.split(",");
 							String stid = data[0];
 							String element = data[1];
 							String value_str = data[2];
+							System.out.println("ever been here"+stid+element+value_str+line);
+
 							if(!stations.containsKey(stid)) {
 								continue;
 							}
-							Element e = new Element(timestamp, element, stations.get(stid), Double.parseDouble(value_str), fake_flags);
+
+							Element e = new Element(timestamp, element, stations.get(stid), 
+									(double)Integer.parseInt(value_str), fake_flags);
 							emit(e);
 						}
 						reader.nextBatch();

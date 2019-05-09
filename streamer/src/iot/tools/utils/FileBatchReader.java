@@ -9,7 +9,7 @@ public class FileBatchReader {
 
 	public boolean eof = false;
 	public ArrayList<String> lines = new ArrayList<String>();
-	public static int batchLimit =100000;
+	public int batchLimit =200000;
 	BufferedReader br;
 	
 	public FileBatchReader(String path, boolean skip_head) {
@@ -24,6 +24,10 @@ public class FileBatchReader {
 			eof = true;
 			e.printStackTrace();
 		} 
+	}
+	
+	public void setBufferSize(int buffer_size) {
+		this.batchLimit = buffer_size;
 	}
 	
 	public FileBatchReader(BufferedReader br, boolean skip_head) {

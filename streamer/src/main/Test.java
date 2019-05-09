@@ -72,9 +72,17 @@ public class Test {
 		try {
 			cd.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void test_load_climatedata_local() {
+		ClimateData cd = new ClimateData(StreamerConfig.get("climate-meta-dir"));
+		ArrayList<String> elements = new ArrayList<String>();
+		elements.add("TMAX");
+		elements.add("TMIN");
+		cd.setInterestedElements(elements);
+		cd.loadFromFiles(StreamerConfig.get("climate-data-dir-tiny"));
 	}
 	
 	public static void test_streaming_climatedata() {

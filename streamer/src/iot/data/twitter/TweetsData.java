@@ -17,7 +17,6 @@ public class TweetsData extends iot.common.TemporalSpatialData{
 	
 	@Override
 	public void loadFromFiles(String path) {
-		FileBatchReader.batchLimit = 1000;
 		File f = new File(path);
 		if(f.isFile()) {
 			//decompress and load the data inside

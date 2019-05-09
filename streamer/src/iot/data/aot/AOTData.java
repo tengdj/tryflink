@@ -23,7 +23,6 @@ public class AOTData extends TemporalSpatialData{
 	public void loadFromFiles(String path) {
 		
 		//loading data
-		FileBatchReader.batchLimit = 200000;
 		FileBatchReader reader = null;
 		if(path.endsWith(".csv")) {
 			reader = new FileBatchReader(path,true);
