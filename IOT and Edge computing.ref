@@ -1,0 +1,162 @@
+@inproceedings{bonomi2012fog,
+  title={Fog computing and its role in the internet of things},
+  author={Bonomi, Flavio and Milito, Rodolfo and Zhu, Jiang and Addepalli, Sateesh},
+  booktitle={Proceedings of the first edition of the MCC workshop on Mobile cloud computing},
+  pages={13--16},
+  year={2012},
+  organization={ACM}
+}
+
+@inproceedings{salman2015edge,
+  title={Edge computing enabling the Internet of Things},
+  author={Salman, Ola and Elhajj, Imad and Kayssi, Ayman and Chehab, Ali},
+  booktitle={2015 IEEE 2nd World Forum on Internet of Things (WF-IoT)},
+  pages={603--608},
+  year={2015},
+  organization={IEEE}
+}
+
+@incollection{bonomi2014fog,
+  title={Fog computing: A platform for internet of things and analytics},
+  author={Bonomi, Flavio and Milito, Rodolfo and Natarajan, Preethi and Zhu, Jiang},
+  booktitle={Big data and internet of things: A roadmap for smart environments},
+  pages={169--186},
+  year={2014},
+  publisher={Springer}
+}
+
+@inproceedings{yi2015survey,
+  title={A survey of fog computing: concepts, applications and issues},
+  author={Yi, Shanhe and Li, Cheng and Li, Qun},
+  booktitle={Proceedings of the 2015 workshop on mobile big data},
+  pages={37--42},
+  year={2015},
+  organization={ACM}
+}
+
+@article{shi2016promise,
+  title={The promise of edge computing},
+  author={Shi, Weisong and Dustdar, Schahram},
+  journal={Computer},
+  volume={49},
+  number={5},
+  pages={78--81},
+  year={2016},
+  publisher={IEEE}
+}
+
+@article{ashton2009internet,
+  title={That ‘internet of things’ thing},
+  author={Ashton, Kevin and others},
+  journal={RFID journal},
+  volume={22},
+  number={7},
+  pages={97--114},
+  year={2009},
+  publisher={Jun}
+}
+
+@article{atzori2010internet,
+  title={The internet of things: A survey},
+  author={Atzori, Luigi and Iera, Antonio and Morabito, Giacomo},
+  journal={Computer networks},
+  volume={54},
+  number={15},
+  pages={2787--2805},
+  year={2010},
+  publisher={Elsevier}
+}
+
+@article{satyanarayanan2009case,
+  title={The case for vm-based cloudlets in mobile computing},
+  author={Satyanarayanan, Mahadev and Bahl, Paramvir and Caceres, Ram{\'o}n and Davies, Nigel},
+  journal={IEEE pervasive Computing},
+  number={4},
+  pages={14--23},
+  year={2009},
+  publisher={IEEE}
+}
+
+@inproceedings{wang2015dynamic,
+  title={Dynamic service migration in mobile edge-clouds},
+  author={Wang, Shiqiang and Urgaonkar, Rahul and Zafer, Murtaza and He, Ting and Chan, Kevin and Leung, Kin K},
+  booktitle={2015 IFIP Networking Conference (IFIP Networking)},
+  pages={1--9},
+  year={2015},
+  organization={IEEE}
+}
+
+@article{hu2015mobile,
+  title={Mobile edge computing—A key technology towards 5G},
+  author={Hu, Yun Chao and Patel, Milan and Sabella, Dario and Sprecher, Nurit and Young, Valerie},
+  journal={ETSI white paper},
+  volume={11},
+  number={11},
+  pages={1--16},
+  year={2015}
+}
+
+@article{satyanarayanan2017emergence,
+  title={The emergence of edge computing},
+  author={Satyanarayanan, Mahadev},
+  journal={Computer},
+  volume={50},
+  number={1},
+  pages={30--39},
+  year={2017},
+  publisher={IEEE}
+}
+
+@article{morabito2018consolidate,
+  title={Consolidate IoT edge computing with lightweight virtualization},
+  author={Morabito, Roberto and Cozzolino, Vittorio and Ding, Aaron Yi and Beijar, Nicklas and Ott, Jorg},
+  journal={IEEE Network},
+  volume={32},
+  number={1},
+  pages={102--111},
+  year={2018},
+  publisher={IEEE}
+}
+
+@article{sun2016edgeiot,
+  title={EdgeIoT: Mobile edge computing for the Internet of Things},
+  author={Sun, Xiang and Ansari, Nirwan},
+  journal={IEEE Communications Magazine},
+  volume={54},
+  number={12},
+  pages={22--29},
+  year={2016},
+  publisher={IEEE}
+}
+
+@article{yu2017survey,
+  title={A survey on the edge computing for the Internet of Things},
+  author={Yu, Wei and Liang, Fan and He, Xiaofei and Hatcher, William Grant and Lu, Chao and Lin, Jie and Yang, Xinyu},
+  journal={IEEE access},
+  volume={6},
+  pages={6900--6919},
+  year={2017},
+  publisher={IEEE}
+}
+
+@article{shi2016edge,
+  title={Edge computing: Vision and challenges},
+  author={Shi, Weisong and Cao, Jie and Zhang, Quan and Li, Youhuizi and Xu, Lanyu},
+  journal={IEEE Internet of Things Journal},
+  volume={3},
+  number={5},
+  pages={637--646},
+  year={2016},
+  publisher={IEEE}
+}
+
+@article{li2018learning,
+  title={Learning IoT in edge: deep learning for the internet of things with edge computing},
+  author={Li, He and Ota, Kaoru and Dong, Mianxiong},
+  journal={IEEE Network},
+  volume={32},
+  number={1},
+  pages={96--101},
+  year={2018},
+  publisher={IEEE}
+}
