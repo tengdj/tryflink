@@ -160,3 +160,12 @@
   year={2018},
   publisher={IEEE}
 }
+
+@inproceedings{hong2013opportunistic,
+  title={Opportunistic spatio-temporal event processing for mobile situation awareness},
+  author={Hong, Kirak and Lillethun, David and Ramachandran, Umakishore and Ottenw{\"a}lder, Beate and Koldehofe, Boris},
+  booktitle={Proceedings of the 7th ACM international conference on Distributed event-based systems},
+  pages={195--206},
+  year={2013},
+  organization={ACM}
+}
