@@ -1,4 +1,4 @@
-package iot.common;
+package iot.data;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,7 +7,7 @@ import java.net.Socket;
 
 import iot.tools.utils.StreamerConfig;
 
-public abstract class TemporalSpatialData extends Thread{
+public abstract class TemporalSpatialDataLoader extends Thread{
 	
 	int port = StreamerConfig.getInt("stream-port");
 	String load_path = null;

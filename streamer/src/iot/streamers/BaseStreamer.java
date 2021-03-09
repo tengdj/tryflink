@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 import org.json.JSONObject;
 
-import iot.common.Event;
+import iot.data.Event;
 import iot.tools.utils.StreamerConfig;
 
 
@@ -45,6 +45,21 @@ public class BaseStreamer extends Thread{
 	/* entry function for the Thread class */
 	public void run() {
 		globalCount();
+	}
+	
+	/* maintain a unique counter as a state to hold the number of items processed*/
+	protected void globalCount() {
+		DataStream<String> text = env.socketTextStream(host, port, "\n");
+		DataStream<Tuple2<String, Long>> processed = text.map(new EventMapper())
+					.keyBy(e->e.id)
+					.process(new ItemCounter());
+		
+		processed.print();
+		try {
+			env.execute("socket streamer");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*print the content of the stream every 5 seconds*/
@@ -82,21 +97,6 @@ public class BaseStreamer extends Thread{
 		}
 	}
 	
-
-	/* maintain a unique counter as a state to hold the number of items processed*/
-	protected void globalCount() {
-		DataStream<String> text = env.socketTextStream(host, port, "\n");
-		DataStream<Tuple2<String, Long>> processed = text.map(new EventMapper())
-					.keyBy(e->e.geohash)
-					.process(new ItemCounter());
-		
-		processed.print();
-		try {
-			env.execute("socket streamer");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/* a simple mapper to map the string to Event */
 	public static class EventMapper extends RichMapFunction<String, Event> {

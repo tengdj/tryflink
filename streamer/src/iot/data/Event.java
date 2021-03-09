@@ -1,16 +1,12 @@
-package iot.common;
+package iot.data;
 
 import org.json.JSONObject;
-import iot.tools.geohash.GeoHash;
 
 public class Event {
 
 	public long timestamp;
 	public Point coordinate;
-	public JSONObject features = null;
-	public String geohash = null;
 	public String id = "";
-	
 	
 	public Event() {
 		
@@ -20,15 +16,6 @@ public class Event {
 		id = obj.getString("id");
 		timestamp = obj.getLong("timestamp");
 		coordinate = new Point(obj.getDouble("longitude"),obj.getDouble("latitude"));
-		features = obj.getJSONObject("features");
-		getGeoHash();
-	}
-	public JSONObject getFeatures() {
-		if(features!=null) {
-			return features;
-		}
-		features = new JSONObject();
-		return features;
 	}
 	
 	public long getTime() {
@@ -38,22 +25,13 @@ public class Event {
 	public Point getLocation() {
 		return coordinate;
 	}
-	
-	public String getGeoHash() {
-		if(geohash==null) {
-			geohash = GeoHash.withCharacterPrecision(coordinate.latitude, coordinate.longitude, 12).toBase32();
-		}
-		return geohash;
-	}
-	
+
 	public JSONObject toJson() {
 		JSONObject jsonobj = new JSONObject();
 		jsonobj.put("id", id);
 		jsonobj.put("timestamp", timestamp);
 		jsonobj.put("longitude", coordinate.longitude);
 		jsonobj.put("latitude", coordinate.latitude);
-		jsonobj.put("geohash", getGeoHash());
-		jsonobj.put("features", getFeatures());
 		return jsonobj;
 	}
 	
