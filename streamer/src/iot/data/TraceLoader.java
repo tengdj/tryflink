@@ -28,7 +28,14 @@ public class TraceLoader extends TemporalSpatialDataLoader{
 	 * */
 	@Override
 	public void loadFromFiles(String path) {
-		
+		// some fake code to be replaced
+		for(int i=0;i<limits;i++) {
+			Event e = new Event();
+			e.id = i+"";
+			e.timestamp = i;
+			e.coordinate = new Point(0.1, 0.1);
+			emit(e);
+		}
 	}
 
 	@Override
