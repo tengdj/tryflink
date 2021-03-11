@@ -11,12 +11,13 @@ public abstract class TemporalSpatialDataLoader extends Thread{
 	
 	int port = StreamerConfig.getInt("stream-port");
 	String load_path = null;
+	/* limit for test only, stop after emitting such number of events */
+	int limits = Integer.MAX_VALUE;
 	protected PrintWriter out = null;
 	Socket socket = null;
 	ServerSocket listener = null;
 	
 	public abstract void initialize(String path);
-	public abstract void loadFromFiles(String path);
 	public void finalize() {
 		System.out.println("loading complate");
 	}
@@ -28,12 +29,16 @@ public abstract class TemporalSpatialDataLoader extends Thread{
 		}
 	};
 	
+	public void setLimits(int limits) {
+		this.limits = limits;
+	}
 	public void setPath(String path) {
 		this.load_path = path;
 	}
 	public void setPort(int port) {
 		this.port = port;
 	}
+	public abstract void loadFromFiles();
 	
 	public void run() {
 		try {
@@ -46,7 +51,7 @@ public abstract class TemporalSpatialDataLoader extends Thread{
 			e.printStackTrace();
 			return;
 		}
-		loadFromFiles(load_path);
+		loadFromFiles();
 		disconnect();
 		finalize();
 	}

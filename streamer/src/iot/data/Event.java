@@ -29,6 +29,7 @@ public class Event {
 	public JSONObject toJson() {
 		JSONObject jsonobj = new JSONObject();
 		jsonobj.put("id", id);
+		System.out.println(id);
 		jsonobj.put("timestamp", timestamp);
 		jsonobj.put("longitude", coordinate.longitude);
 		jsonobj.put("latitude", coordinate.latitude);

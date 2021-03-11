@@ -2,8 +2,7 @@ package iot.data;
 
 public class TraceLoader extends TemporalSpatialDataLoader{
 	
-	/* limit for test only, stop after emitting such number of events */
-	public long limits = Long.MAX_VALUE;
+	public String trace_path = "";
 	
 	@Override
 	public void emit(Event e) {
@@ -15,19 +14,13 @@ public class TraceLoader extends TemporalSpatialDataLoader{
 	public TraceLoader() {
 	}
 	
-	public TraceLoader(long limits) {
-		if(limits>0) {
-			this.limits = limits;
-		}
-	}
-	
 	/*
 	 * TODO: 
 	 * load the formated file and emit each record as an event (look into the Event class for definition)
 	 * 
 	 * */
 	@Override
-	public void loadFromFiles(String path) {
+	public void loadFromFiles() {
 		// some fake code to be replaced
 		for(int i=0;i<limits;i++) {
 			Event e = new Event();
