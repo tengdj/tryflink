@@ -7,7 +7,7 @@ public class DataLoader{
 	public static void test_load_trace() {
 		TraceLoader loader = new TraceLoader();
 		loader.setPath("/path/to/trace/file");
-		loader.setLimits(1000);
+		loader.setLimits(10);
 		loader.start();
 		try {
 			loader.join();

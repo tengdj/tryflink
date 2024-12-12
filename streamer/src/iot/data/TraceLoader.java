@@ -1,5 +1,7 @@
 package iot.data;
 
+import java.util.Random;
+
 public class TraceLoader extends TemporalSpatialDataLoader{
 	
 	public String trace_path = "";
@@ -22,11 +24,12 @@ public class TraceLoader extends TemporalSpatialDataLoader{
 	@Override
 	public void loadFromFiles() {
 		// some fake code to be replaced
+		Random r = new Random(315);
 		for(int i=0;i<limits;i++) {
 			Event e = new Event();
 			e.id = i+"";
 			e.timestamp = i;
-			e.coordinate = new Point(0.1, 0.1);
+			e.coordinate = new Point(-180 + 360*r.nextDouble(),-90 + 180*r.nextDouble());
 			emit(e);
 		}
 	}
